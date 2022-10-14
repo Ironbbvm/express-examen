@@ -62,7 +62,35 @@ ctrl.postTarea = async (req, res) => {
 
 
 }
-ctrl.deleteTarea= async (req , res)=>{
-    
+ctrl.updateTarea = async(req, res)=>{
+    try {
+        const {title, description} = req.body
+        const id = req.params.id
+        const updTarea = await Tarea.findByIdAndUpdate(id, {title, description})
+        res.json({
+            msg:"Tarea modificada",
+            updTarea
+        })
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            msg:"No se pudo modificar la tarea tarea."
+        })
+    }
 }
+
+ctrl.deleteTarea = async(req, res)=>{
+    const id = req.params.id
+
+    const delTarea = await Tarea.findByIdAndUpdate(id, {isActive: false})
+
+    if(!delTarea){
+        res.json("No se pudo eliminar la tarea")
+    }
+
+    res.json("Tarea eliminada ")
+}
+
 module.exports = ctrl;
